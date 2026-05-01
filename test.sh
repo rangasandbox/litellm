@@ -1,9 +1,14 @@
 #!/bin/bash
 
-# Load master key from .env
+# Load env vars from .env
 export $(grep -v '^#' .env | xargs)
 
-curl -s http://0.0.0.0:4000/chat/completions \
+# Allow overriding host, default to localhost
+HOST="${LITELLM_HOST:-localhost}"
+
+echo "Testing LiteLLM proxy at http://${HOST}:4000 ..."
+
+curl -s "http://${HOST}:4000/chat/completions" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer ${LITELLM_MASTER_KEY}" \
   -d '{

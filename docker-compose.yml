@@ -2,8 +2,9 @@ services:
   litellm:
     image: docker.litellm.ai/berriai/litellm:main-stable
     container_name: litellm-proxy
-    ports:
-      - "4000:4000"
+    # Port NOT exposed to host — nginx handles all external traffic
+    expose:
+      - "4000"
     volumes:
       - ./config.yaml:/app/config.yaml
     environment:
@@ -18,4 +19,15 @@ services:
       timeout: 10s
       retries: 3
       start_period: 30s
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    container_name: litellm-nginx
+    ports:
+      - "80:80"       # HTTP — publicly accessible
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - litellm
     restart: unless-stopped
