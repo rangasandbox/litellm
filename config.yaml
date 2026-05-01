@@ -1,0 +1,13 @@
+model_list:
+  - model_name: gpt-5.4           # name clients use in their requests
+    litellm_params:
+      model: azure/gpt-5.4        # azure/<your-deployment-name>
+      api_base: os.environ/AZURE_API_BASE
+      api_key: os.environ/AZURE_API_KEY
+      api_version: os.environ/AZURE_API_VERSION
+
+litellm_settings:
+  drop_params: True               # drop unsupported params silently
+
+general_settings:
+  master_key: sk-local-dev        # change this in production
